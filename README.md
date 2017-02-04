@@ -1,2 +1,130 @@
 # ngtagcloud
 Angular tag cloud with click handler
+
+Create simple tag clouds for your angular apps.
+
+## Installation
+
+### bower
+
+```
+	$ bower install ngtagcloud --save
+```
+
+Include the following in your project html;
+
+```
+	<link rel="stylesheet" href="bower_components/ngtagcloud/ngtagcloud.css">
+    <script type="text/javascript" src='bower_components/ngtagcloud/ngtagcloud.js'></script>
+```
+
+replace bower_components with the path to your bower library if it isn't bower_components, e.g. replace with *lib* for ionic projects.
+
+
+### npm
+
+```
+	npm install --save ngtagcloud
+```
+
+Include the following in your project html;
+
+```
+	<link rel="stylesheet" href="node_modules/ngtagcloud/ngtagcloud.css">
+    <script type="text/javascript" src='node_modules/ngtagcloud/ngtagcloud.js'></script>
+```
+
+Include in your Angular app with;
+
+```
+
+	angular.modules('myApp',['ngTagCloud',....])
+```
+
+Include an ng-tag-cloud element in your project html;
+
+```
+	<ng-tag-cloud  tag-data="cloud_data" ></ng-tag-cloud> 
+```
+
+For each tag in the cloud a *span* element is appended to the tag cloud container.
+
+The tag data is expected to be an array of objects with text and weight properties  
+
+```
+	{text: <string>, weight: <number>}
+
+	e.g.
+	
+	$scope.cloud_data = [
+          {text: "Lorem", weight: 15},  
+          {text: "Ipsum", weight: 9},
+          {text: "Dolor", weight: 6},
+          {text: "Sit", weight: 7},
+          {text: "Amet", weight: 5} 
+      ];
+```
+
+Each tag in the cloud can have an associated link e.g
+
+```
+	$scope.cloud_data = [
+          {text: "Lorem", weight: 15, link: '/api/tags/search/Lorem'},  
+          {text: "Ipsum", weight: 9, link: '/api/tags/search/Ipsum'},
+          {text: "Dolor", weight: 6, link: 'http://google.com?q=Dolor'},
+          {text: "Sit", weight: 7},
+          {text: "Amet", weight: 5} 
+      ];
+      
+```
+
+#### Common URL
+
+You can set a common link URL for all tags with the *tag-link* attribute
+
+
+```
+	<ng-tag-cloud  tag-data="cloud_data" tag-link='http://google.com?q=__tag__'></ng-tag-cloud>  
+```
+
+The **__tag__** in the link is replaced with the tag text for each tag in the cloud.  Specific tag links take preference over
+a common tag link if both are given.
+
+
+#### Tag click handler
+
+You can register a click handler so that a function is called in the scope of the parent controller when the tag is clicked  E.g.
+
+index.html
+```
+	<ng-tag-cloud  tag-data="cloud_data" tag-click="tag_click_handler(text)"></ng-tag-cloud> 
+```
+
+controller.js
+```
+
+$scope.tag_click_handler = function(text) {
+	console.log('a tag in the cloud was clicked', text);
+		
+	// a useful thing to do here might be to search with the tag e.g
+	$state.go('tag.search',{term: text});
+}
+
+and with the ui-router setup
+
+$stateProvider.state('tag.search', {
+    url: '/tags/search',
+    controller: 'SearchCtrl',
+    templateUrl: 'search_results.html',
+    params: {
+        tag: null
+    } 
+  
+})
+
+```
+
+You can call the method anything you like but the parameter name in the attribute must remain as *text*.
+
+
+
