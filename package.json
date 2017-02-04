@@ -1,0 +1,29 @@
+{
+  "name": "ngtagcloud",
+  "version": "1.0.0",
+  "description": "Angular tag cloud with click handler",
+  "main": "ngtagcloud.js",
+  "scripts": {
+    "minify": "minify --output ngtagcloud.min.js ngtagcloud.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/damianham/ngtagcloud.git"
+  },
+  "keywords": [
+    "angular",
+    "tag-cloud",
+    "angular-tag-cloud",
+    "tags"
+  ],
+  "author": "Damian Hamill <damianham@gmail.com> (https://github.com/damianham)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/damianham/ngtagcloud/issues"
+  },
+  "homepage": "https://github.com/damianham/ngtagcloud#readme",
+  "devDependencies": {
+    "minifier": "^0.8.1"
+  }
+}
