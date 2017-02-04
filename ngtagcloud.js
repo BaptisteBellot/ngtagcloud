@@ -28,9 +28,11 @@ angular.module('ngTagCloud',[])
         var container;
         
         var wrap_text = function(link, tagtext) {
-          if (typeof(link) === 'undefined') return tagtext;
+          if (typeof(link) === 'undefined') {
+            return tagtext;
+          }
           
-          // replace {{tag}} in the link with the tagtext
+          // replace __tag__ in the link with the tagtext
           return link.replace('__tag__',tagtext);
         }
         
@@ -39,17 +41,21 @@ angular.module('ngTagCloud',[])
           
           if (tagdata.length < 1) return;
           
-       // Make sure every weight is a number before sorting
+          var maxweight = 0;
+          var minweight = 0;
+          
+          // Make sure every weight is a number and get the min and max
           for (var i = 0; i < tagdata.length; i++) {
             tagdata[i].weight = parseFloat(tagdata[i].weight, 10);
+            if (tagdata[i].weight > maxweight) {
+              maxweight = tagdata[i].weight;
+            } else if (minweight > 0 && minweight > tagdata[i].weight) {
+              minweight = tagdata[i].weight;
+            } 
           }
-
-          // Sort tagdata from the word with the highest weight to the one with the lowest
-          tagdata.sort(function(a, b) { if (a.weight < b.weight) {return 1;} else if (a.weight > b.weight) {return -1;} else {return 0;} }); 
-        
+       
           var cloud_div = container.find('div');
-          var maxweight = tagdata[0].weight;
-          var minweight = tagdata[tagdata.length - 1].weight;
+         
           var weight;
           
           //console.log('container div', cloud_div);
@@ -123,7 +129,7 @@ angular.module('ngTagCloud',[])
           $scope.$watchCollection('tagData', function (newValue, oldValue) {
             $timeout(function(){
                 buildCloud(newValue);
-            }, 10);
+            }, 1000);
           });
           return true;
         }
