@@ -8,11 +8,11 @@
 
 angular.module('ngTagCloud',[])
 
-.directive('ngTagCloud', ['$timeout', '$log',function($timeout, $log) {
+.directive('ngTagCloud', ['$timeout', '$log', '$http', function($timeout, $log,$http) {
     var directive = {
         restrict: 'EA',
         scope: { 
-          tagOverflow: '=?',
+          tagUrl: '@',
           tagData: '=', 
           tagLink: '@',
           tagClick: '&'
@@ -121,16 +121,34 @@ angular.module('ngTagCloud',[])
         
         var getData = function($scope) {
           
-          if (typeof($scope.tagData) === 'undefined' || $scope.tagData === "") {
-            $log.error("ngTagCloud: data attribute is missing. Usage <ng-tag-cloud tag-data='expression'></ng-tag-cloud>\n" +
+          if ( (typeof($scope.tagData) === 'undefined' || $scope.tagData === "") && 
+              (typeof($scope.tagUrl) === 'undefined' || $scope.tagUrl === "") ) {
+            $log.error("ngTagCloud: either tag-data or tag-url attribute must be present. Usage <ng-tag-cloud tag-data='expression' tag-url='url'></ng-tag-cloud>\n" +
                 "See: https://github.com/damianham/ngtagcloud");
             return false;
           }
-          $scope.$watchCollection('tagData', function (newValue, oldValue) {
-            $timeout(function(){
-                buildCloud(newValue);
-            }, 1000);
-          });
+          
+          if (typeof($scope.tagData) !== 'undefined' && $scope.tagData !== "") {
+            $scope.$watchCollection('tagData', function (newValue, oldValue) {
+              $timeout(function(){
+                  buildCloud(newValue);
+              }, 100);
+            });
+          } else {
+            // use the supplied link to fetch the tag data
+            $http.get($scope.tagUrl)
+            .then(function(res) {  
+              $timeout(function(){
+                buildCloud(res.data);
+              }, 100);
+            },
+              function(error) {
+                $log.error( error); 
+            }
+            );
+          }
+          
+         
           return true;
         }
         
