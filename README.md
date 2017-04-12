@@ -77,6 +77,20 @@ Each tag in the cloud can have an associated link e.g
       
 ```
 
+#### Tag Data URL
+
+Instead of providing a bound attribute to the tag data you can specify a URL with the *tag-url* attribute and the directive will download the tag data from the URL.  The data from the web service must be encoded with JSON.
+
+
+```
+	<ng-tag-cloud  tag-url="/api/get_tag_data" ></ng-tag-cloud> //  a relative URL
+	
+	or
+	
+	<ng-tag-cloud  tag-url="http://www.example.com/api/get_tag_data" ></ng-tag-cloud> //  an absolute URL
+```
+
+
 #### Common URL
 
 You can set a common link URL for all tags with the *tag-link* attribute
